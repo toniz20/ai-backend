@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools Directory</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f6f8; padding: 40px; }
+        h1 { text-align: center; color: #333; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .card h3 { margin: 0 0 10px 0; font-size: 18px; }
+        .card p { color: #666; font-size: 14px; line-height: 1.5; margin-bottom: 15px; }
+        .card a { text-decoration: none; color: #0366d6; font-weight: bold; font-size: 14px; }
+        .card .emoji { font-size: 24px; display: block; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🤖 Trending AI Tools</h1>
+    <div id="tools-container" class="grid">Loading tools...</div>
+
+    <script>
+        async function loadTools() {
+            try {
+                // We'll assume the json file is in the same folder as this HTML
+                const response = await fetch('tools.json');
+                const data = await response.json();
+                const container = document.getElementById('tools-container');
+                container.innerHTML = '';
+
+                data.tools.forEach(tool => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <span class="emoji">${tool.icon_emoji || '🚀'}</span>
+                        <h3>${tool.name}</h3>
+                        <p>${tool.description}</p>
+                        <a href="${tool.url}" target="_blank">Visit Tool &rarr;</a>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                document.getElementById('tools-container').innerHTML = '⚠️ Could not load tools. Make sure tools.json is in the same folder as this HTML file.';
+                console.error(error);
+            }
+        }
+        loadTools();
+    </script>
+</body>
+</html>
